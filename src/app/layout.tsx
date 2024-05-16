@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Nav from "../components/Nav";
+import DarkMode from "@/components/DarkMode";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +17,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let cookie = cookies().get("mode");
+
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={
+          cookie != undefined && cookie.value == "dark"
+            ? `${inter.className} bg-gray-200 dark`
+            : `${inter.className} bg-gray-200`
+        }
+      >
+        <Nav></Nav>
+        <main>{children}</main>
+        <DarkMode />
+      </body>
     </html>
   );
 }
